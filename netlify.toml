@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "public"
+  publish = "build/client"
 
   [build.environment]
     # cache Cypress binary in local "node_modules" folder
@@ -11,6 +11,7 @@
 
 [dev]
   command = "npm run dev"
+  framework = "vite"
   port = 3000
 
 [[redirects]]
