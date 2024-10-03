@@ -9,6 +9,7 @@ import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/session.server";
 import { validateEmail } from "~/utils";
+import { Button } from "~/components/ui/button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -93,18 +94,22 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
-      <div className="relative w-full max-w-md p-8">
+      <div className="w-full max-w-2xl p-8">
         <img
           src="../../public/logo.svg"
           alt="Logo"
-          className="absolute top-8 left-8 w-24"
+          className="absolute top-16 left-24"
         />
 
-        <Form method="post" className="mt-32 space-y-6" noValidate>
+        <Form
+          method="post"
+          className="mt-34 ml-52 space-y-6 max-w-md"
+          noValidate
+        >
+          <h2 className="text-center text-2xl font-semibold">Log In</h2>
           <div>
-            <h2 className="text-center text-3xl font-bold">Log In</h2>
             <label className="text-sm font-medium" htmlFor="email">
-              <span className="block text-gray-700 ">Email Address</span>
+              <span className="block text-gray-900 ">Email</span>
               {actionData?.errors?.email && (
                 <span className="block pt-1 text-red-700" id="email-error">
                   {actionData?.errors?.email}
@@ -112,8 +117,9 @@ export default function Login() {
               )}
             </label>
             <input
-              className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+              className="w-full rounded-md border border-gray-400 px-3 py-2 my-1.5 text-lg"
               autoComplete="email"
+              placeholder="Email"
               type="email"
               name="email"
               id="email"
@@ -124,10 +130,7 @@ export default function Login() {
           </div>
           <div>
             <label className="text-sm font-medium" htmlFor="password">
-              <span className="block text-gray-700">Password</span>
-              <span className="block font-light text-gray-700">
-                Must have at least 6 characters.
-              </span>
+              <span className="block text-gray-900">Password</span>
               {actionData?.errors?.password && (
                 <span className="pt-1 text-red-700" id="password-error">
                   {actionData?.errors?.password}
@@ -137,43 +140,27 @@ export default function Login() {
             <input
               id="password"
               type="password"
+              placeholder="Password"
               name="password"
               autoComplete=""
-              className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+              className="w-full rounded-md border border-gray-400 px-3 py-2 my-1.5 text-lg"
               aria-invalid={actionData?.errors?.password ? true : undefined}
               aria-describedby="password-error"
               ref={passwordRef}
             />
           </div>
-          <button
-            className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
+          <Button
+            className="w-full rounded bg-cyan-900 py-2 px-4 text-white hover:bg-cyan-950 focus:bg-cyan-700"
             type="submit"
           >
             Log in
-          </button>
+          </Button>
           <input type="hidden" name="redirectTo" value={redirectTo} />
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                id="remember"
-                name="remember"
-                type="checkbox"
-              />
-              <label
-                className="ml-2 block text-sm text-gray-900"
-                htmlFor="remember"
-              >
-                Remember me
-              </label>
-            </div>
             <div className="text-center mt-6 text-gray-500">
               Don't have an account?{" "}
-              <Link
-                className="text-blue-500 underline"
-                to={{ pathname: "/join" }}
-              >
-                Sign up
+              <Link className="text-black" to={{ pathname: "/join" }}>
+                Sign Up
               </Link>
             </div>
           </div>
