@@ -15,11 +15,11 @@ const openaiClient = createOpenAI({
   apiKey: openaiApiKey,
 });
 
-export const generateAiBodyText = async (prompt: string) => {
+export async function generateAiBodyText(prompt: string) {
   return await generateText({
     model: openaiClient("gpt-4-turbo"),
     system: `You are supposed to create the body of a personal post-it note based on the provided note's title. 
         Please write a maximum of two paragraphs.`,
     prompt,
   });
-};
+}
