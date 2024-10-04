@@ -7,9 +7,9 @@
   "type": "module",
   "scripts": {
     "dev": "remix vite:dev",
-    "build": "remix vite:build",
+    "build": "npm run build:css && remix vite:build",
     "start": "netlify serve",
-    "build:css": "npm run generate:css -- --minify",
+    "build:css": "npx tailwindcss -o ./app/styles/tailwind.css --minify",
     "build:remix": "remix vite:build",
     "dev:css": "npm run generate:css -- --watch",
     "dev:remix": "remix vite:dev",
