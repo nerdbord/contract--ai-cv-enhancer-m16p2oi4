@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "remix vite:dev",
     "build": "remix vite:build",
-    "start": "remix-serve ./build/server/index.js",
+    "start": "netlify serve",
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "remix build",
     "dev:css": "npm run generate:css -- --watch",
