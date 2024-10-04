@@ -6,17 +6,15 @@ import type {
 import { json } from "@remix-run/node";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
 
-import tailwindStylesheetUrl from "./styles/tailwind.css";
-import styles from "./styles/index.css";
+import tailwindStylesheetUrl from "./styles/tailwind.css?url";
+import styles from "./styles/index.css?url";
 import { getUser } from "./session.server";
-import { cssBundleHref } from "@remix-run/css-bundle";
 
 export const meta: MetaFunction = () => {
   return [{ title: "New Remix App" }];
@@ -26,7 +24,6 @@ export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: tailwindStylesheetUrl },
     { rel: "stylesheet", href: styles },
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
   ];
 };
 
@@ -49,7 +46,6 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );
