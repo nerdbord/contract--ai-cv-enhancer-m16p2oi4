@@ -15,7 +15,6 @@ import {
 import appStylesHref from "./styles/tailwind.css?url";
 import tailwind from "./styles/index.css?url";
 import { getUser } from "./session.server";
-import { cssBundleHref } from "@remix-run/css-bundle";
 
 export const meta: MetaFunction = () => {
   return [{ title: "New Remix App" }];
@@ -25,7 +24,6 @@ export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: appStylesHref },
     { rel: "stylesheet", href: tailwind },
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
   ];
 };
 
