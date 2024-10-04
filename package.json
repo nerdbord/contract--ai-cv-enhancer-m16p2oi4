@@ -6,6 +6,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
+    "prebuild": "npm i",
     "dev": "remix vite:dev",
     "build": "npm run build:css && remix vite:build",
     "start": "netlify serve",

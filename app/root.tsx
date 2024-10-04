@@ -28,9 +28,13 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return json({
-    user: await getUser(request),
-  });
+  try {
+    const user = await getUser(request);
+    return json({ user });
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return json({ user: null }, { status: 500 });
+  }
 }
 
 export default function App() {
