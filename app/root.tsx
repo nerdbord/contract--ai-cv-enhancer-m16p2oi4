@@ -12,8 +12,8 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-import tailwindStylesheetUrl from "./styles/tailwind.css?url";
-import styles from "./styles/index.css?url";
+// import tailwindStylesheetUrl from "./styles/tailwind.css";
+// import styles from "./styles/index.css";
 import { getUser } from "./session.server";
 
 export const meta: MetaFunction = () => {
@@ -22,8 +22,8 @@ export const meta: MetaFunction = () => {
 
 export const links: LinksFunction = () => {
   return [
-    { rel: "stylesheet", href: tailwindStylesheetUrl },
-    { rel: "stylesheet", href: styles },
+    { rel: "stylesheet", href: "./styles/tailwind.css" },
+    { rel: "stylesheet", href: "./styles/index.css" },
   ];
 };
 
