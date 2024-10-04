@@ -3,10 +3,12 @@
   "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "tailwind.config.ts"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2019"],
+    "types": ["@remix-run/node", "vite/client"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "target": "ES2019",
     "strict": true,
@@ -20,7 +22,7 @@
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": true
   },
   // Used by Cypress.config.ts
   "ts-node": {
@@ -31,7 +33,7 @@
       // compilerOptions specified here will override those declared below,
       // but *only* in ts-node.  Useful if you want ts-node and tsc to use
       // different options with a single tsconfig.json.
-      "module": "ES2015" // <==== added this, so it will compile to ES modules, not CommonJS
+      // "module": "ES2015" // <==== added this, so it will compile to ES modules, not CommonJS
     }
   }
 }
