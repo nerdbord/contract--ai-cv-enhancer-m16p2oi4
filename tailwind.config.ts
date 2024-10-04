@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 import tailwindcssSignals from "tailwindcss-signals";
+import tailwindcssAnimate from "tailwindcss-animate"
 
 const config: Config = {
     darkMode: ["class"],
@@ -61,7 +62,7 @@ const config: Config = {
       addVariant("children", "&>*");
     }),
     tailwindcssSignals,
-      require("tailwindcss-animate")
+    tailwindcssAnimate,
 ],
 };
 export default config;

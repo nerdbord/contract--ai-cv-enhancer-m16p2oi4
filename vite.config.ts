@@ -4,18 +4,17 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { installGlobals } from "@remix-run/node";
 import { netlifyPlugin } from "@netlify/remix-adapter/plugin";
 
+
 installGlobals();
 
 export default defineConfig({
   server: {
     port: 3000,
-    hmr: {
-      protocol: 'ws',
-      host: 'localhost'
-    }
   },
   plugins: [
-    remix(),
+    remix({
+      ignoredRouteFiles: ["**/*.css"],
+    }),
     netlifyPlugin(),
     tsconfigPaths(),
   ],
