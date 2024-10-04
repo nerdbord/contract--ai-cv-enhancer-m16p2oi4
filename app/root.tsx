@@ -12,8 +12,8 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-import appStylesHref from "./styles/tailwind.css?url";
-import tailwind from "./styles/index.css?url";
+import appStylesHref from "./styles/tailwind.css";
+import tailwind from "./styles/index.css";
 import { getUser } from "./session.server";
 
 export const meta: MetaFunction = () => {
