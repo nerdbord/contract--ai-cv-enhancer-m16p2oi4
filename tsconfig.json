@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "target": "ES2019",
     "strict": true,
@@ -33,7 +33,7 @@
       // compilerOptions specified here will override those declared below,
       // but *only* in ts-node.  Useful if you want ts-node and tsc to use
       // different options with a single tsconfig.json.
-      //"module": "ES2015" // <==== added this, so it will compile to ES modules, not CommonJS
+      "module": "ES2015" // <==== added this, so it will compile to ES modules, not CommonJS
     }
   }
 }
