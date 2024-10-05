@@ -1,34 +1,22 @@
-import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
 import {
+  json,
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-
-import tailwindStylesheetUrl from "./styles/tailwind.css";
-import styles from "./styles/index.css";
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import stylesheet from "./tailwind.css?url";
 import { getUser } from "./session.server";
-import { cssBundleHref } from "@remix-run/css-bundle";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "New Remix App" }];
+  return [{ title: "CV Enhancer" }];
 };
 
-export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: tailwindStylesheetUrl },
-    { rel: "stylesheet", href: styles },
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-  ];
-};
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   return json({
@@ -38,18 +26,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function App() {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className="h-full">
+      <body>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );

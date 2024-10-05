@@ -6,10 +6,10 @@ import type {
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { verifyLogin } from "~/models/user.server";
-import { createUserSession, getUserId } from "~/session.server";
-import { validateEmail } from "~/utils";
-import { Button } from "~/components/ui/button";
+import { verifyLogin } from "../models/user.server";
+import { createUserSession, getUserId } from "../session.server";
+import { validateEmail } from "../utils";
+import { Button } from "../components/ui/button";
 
 import logo from '../../public/logo.svg'
 import triangles from '../../public/login triangles.svg'

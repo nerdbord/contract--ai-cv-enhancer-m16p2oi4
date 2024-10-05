@@ -1,10 +1,8 @@
-import type { Config } from "tailwindcss";
-import plugin from "tailwindcss/plugin";
-import tailwindcssSignals from "tailwindcss-signals";
+import type { Config } from 'tailwindcss'
 
-const config: Config = {
-    darkMode: ["class"],
-    content: ["./app/**/*.{ts,tsx,jsx,js}", "./src/**/*.{js,jsx,ts,tsx}"],
+export default {
+    darkMode: ['class'],
+    content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
   	extend: {
   		borderRadius: {
@@ -56,12 +54,6 @@ const config: Config = {
   		}
   	}
   },
-  plugins: [
-    plugin(function ({ addVariant }) {
-      addVariant("children", "&>*");
-    }),
-    tailwindcssSignals,
-      require("tailwindcss-animate")
-],
-};
-export default config;
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config
+
