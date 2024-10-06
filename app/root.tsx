@@ -6,7 +6,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import stylesheet from "./tailwind.css?url";
 import { getUser } from "./session.server";
 
@@ -16,6 +20,10 @@ export const meta: MetaFunction = () => {
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap",
+  },
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -33,7 +41,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="font-inter">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
