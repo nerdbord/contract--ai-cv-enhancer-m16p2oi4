@@ -4,6 +4,9 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { netlifyPlugin } from "@netlify/remix-adapter/plugin";
 
 export default defineConfig({
+  build: {
+    target: "esnext",
+  },
   plugins: [
     remix({
       future: {

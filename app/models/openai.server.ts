@@ -1,12 +1,13 @@
 import { createOpenAI } from "@ai-sdk/openai";
-import { generateText } from "ai";
+import { generateObject, generateText } from "ai";
 import invariant from "tiny-invariant";
+import { resumeSchema } from "~/types/resume";
 
 const openaiApiKey = process.env.OPENAI_API_KEY;
 
 invariant(
   openaiApiKey,
-  "OPENAI_API_KEY must be set in your environment variables.",
+  "OPENAI_API_KEY must be set in your environment variables."
 );
 
 const openaiClient = createOpenAI({
@@ -21,5 +22,35 @@ export const generateAiBodyText = async (prompt: string) => {
     system: `You are supposed to create the body of a personal post-it note based on the provided note's title. 
         Please write a maximum of two paragraphs.`,
     prompt,
+  });
+};
+
+export const readCVTextIntoSchema = async (parsedResume: string) => {
+  return generateObject({
+    model: openaiClient("gpt-4-turbo"),
+    system: "You will be provided with data parsed from a pdf file. Your task is to read the data, and fill out the schema as per info from the data.",
+    prompt: parsedResume,
+    schema: resumeSchema,
+  });
+};
+
+export const readCVFileIntoSchema = async (
+  resumeData: string | Uint8Array | Buffer | ArrayBuffer | URL
+) => {
+  return generateObject({
+    model: openaiClient("gpt-4-turbo"),
+    schema: resumeSchema,
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "file",
+            data: resumeData,
+            mimeType: "application/pdf",
+          },
+        ],
+      },
+    ],
   });
 };
