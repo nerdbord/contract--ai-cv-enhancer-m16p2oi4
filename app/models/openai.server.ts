@@ -28,7 +28,7 @@ export const generateAiBodyText = async (prompt: string) => {
 export const readCVTextIntoSchema = async (parsedResume: string) => {
   return generateObject({
     model: openaiClient("gpt-4-turbo"),
-    system: "Fill out the schema based on the provided file.",
+    system: "You will be provided with data parsed from a pdf file. Your task is to read the data, and fill out the schema as per info from the data.",
     prompt: parsedResume,
     schema: resumeSchema,
   });
