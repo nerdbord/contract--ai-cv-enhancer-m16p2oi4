@@ -1,34 +1,21 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import type {
   ActionFunction,
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import {
-  Form,
-  Link,
-  useActionData,
-  useSearchParams,
-  useSubmit,
-} from "@remix-run/react";
-import { verifyLogin } from "~/models/user.server";
-import {
-  commitSession,
-  createUserSession,
-  getSession,
-  getUserId,
-} from "~/session.server";
-import { validateEmail } from "~/utils";
-import { Button } from "~/components/ui/button";
+import { Form, useSubmit } from "@remix-run/react";
+import { commitSession, getSession, getUserId } from "~/session.server";
 
-import logo from "../../public/logo.svg";
-import triangles from "../../public/main triangles.svg";
-import { Input } from "~/components/ui/input";
-import { readCVIntoSchema } from "~/models/openai.server";
+import logo from "/logo.svg";
+import triangles from "/main triangles.svg";
+import {
+  readCVFileIntoSchema,
+  readCVTextIntoSchema,
+} from "~/models/openai.server";
 import { resumeSchema } from "~/types/resume";
-
-import { createWorker } from "tesseract.js";
+import { readFileAsBase64 } from "~/lib/utils";
 
 export const meta: MetaFunction = () => {
   return [
@@ -45,25 +32,24 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  console.log("action function has started");
+
   const formData = await request.formData();
-  const file = formData.get("file-upload") as File;
-  console.log(file);
+  const file = formData.get("file-upload") as Blob;
 
   if (!file) {
     return json({ error: "No file uploaded" }, { status: 400 });
   }
 
-  //this line uses tesseract to OCR the file
-  const {
-    data: { text },
-  } = await (await createWorker("eng")).recognize(file);
+  const buffer = await file.text() as string;
 
   try {
     // Send file to AI model (generateObjectFromFile is a hypothetical SDK function)
-    const cvData = await readCVIntoSchema(text);
+    const cvData = await readCVTextIntoSchema(buffer);
+    console.log('\n\n\nDATADATADATADATA: \n\n\n',cvData);
 
     // Validate the response against the CVSchema (this ensures the data structure is correct)
-    const parsedCV = resumeSchema.safeParse(cvData);
+    const parsedCV = resumeSchema.safeParse(cvData.object);
 
     if (!parsedCV.success) {
       return json(
@@ -91,11 +77,11 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Upload() {
-  const [uploadedFile, setUploadedFile] = useState<File | undefined>();
-  const formRef = useRef<HTMLFormElement | null>(null); // Create a ref for the form
   const submit = useSubmit();
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {};
+  // const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   submit(event.currentTarget);
+  // };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
@@ -105,9 +91,7 @@ export default function Upload() {
           <Form
             method="post"
             encType="multipart/form-data"
-            onChange={(event) => {
-              submit(event.currentTarget);
-            }}
+            onChange={(e) => submit(e.currentTarget)}
           >
             <div className="relative w-full h-[264px] left-24 bg-neutral-50 rounded-lg border border-neutral-400 flex justify-center items-center">
               <label
@@ -128,7 +112,6 @@ export default function Upload() {
                 type="file"
                 name="file-upload"
                 required
-                onChange={handleFileUpload}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               />
             </div>
@@ -137,11 +120,6 @@ export default function Upload() {
             <span className="text-gray-700 text-xs leading-tight">
               Supported formats: DOC, DOCX, PDF
             </span>
-            {uploadedFile && (
-              <span className="text-gray-700 text-xs font-medium">
-                Selected file: {uploadedFile.name}
-              </span>
-            )}
             <span className="text-gray-700 text-xs font-medium">
               Maximum size: 5 MB
             </span>

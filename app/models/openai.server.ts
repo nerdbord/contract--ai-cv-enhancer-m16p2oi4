@@ -25,11 +25,32 @@ export const generateAiBodyText = async (prompt: string) => {
   });
 };
 
-export const readCVIntoSchema = async (parsedResume: string) => {
+export const readCVTextIntoSchema = async (parsedResume: string) => {
   return generateObject({
     model: openaiClient("gpt-4-turbo"),
     system: "Fill out the schema based on the provided file.",
     prompt: parsedResume,
     schema: resumeSchema,
+  });
+};
+
+export const readCVFileIntoSchema = async (
+  resumeData: string | Uint8Array | Buffer | ArrayBuffer | URL
+) => {
+  return generateObject({
+    model: openaiClient("gpt-4-turbo"),
+    schema: resumeSchema,
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "file",
+            data: resumeData,
+            mimeType: "application/pdf",
+          },
+        ],
+      },
+    ],
   });
 };
