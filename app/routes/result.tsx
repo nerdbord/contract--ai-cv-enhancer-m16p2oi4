@@ -1,10 +1,11 @@
 import { LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { getSession } from "~/session.server";
+import { resumeType } from "~/types/resume";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request);
-  const cvData = session.get("cvData");
+  const cvData = session.get("cvData") as resumeType;
 
   if (!cvData) {
     throw new Response("No CV data found", { status: 404 });

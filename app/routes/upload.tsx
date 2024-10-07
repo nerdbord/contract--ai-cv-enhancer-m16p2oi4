@@ -10,9 +10,9 @@ import logo from "/logo.svg";
 import triangles from "/main triangles.svg";
 import { readCVTextIntoSchema } from "~/models/openai.server";
 import { resumeSchema } from "~/types/resume";
-import { PdfReader } from "pdfreader";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
+import { parseOffice } from "officeparser";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  console.log("action function has started");
+  // console.log("action function has started");
 
   const formData = await request.formData();
   const file = formData.get("file-upload") as File;
@@ -41,24 +41,29 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     let fullString = "";
     const fileBuffer = Buffer.from(await file.arrayBuffer());
-    // Wrapping the parsing logic in a Promise
-    const parsePdf = () =>
-      new Promise((resolve, reject) => {
-        new PdfReader().parseBuffer(fileBuffer, (err, data) => {
-          if (err) {
-            console.error("error:", err);
-            reject(err); // Reject the promise in case of error
-          } else if (!data) {
+
+    const parseFile = () => {
+      return new Promise((resolve, reject) => {
+        parseOffice(fileBuffer, (value: any, error: any) => {
+          if (error) {
+            console.error("error: ", error);
+            reject(error); // Handle the error
+          } else if (!value) {
             console.warn("end of buffer");
-            resolve(data); // Resolve when done
-          } else if (data.text) {
-            fullString += data.text;
+            resolve(null); // Resolve when there's no more data
+          } else if (value) {
+            fullString += value; // Accumulate the text
+            resolve(fullString); // Resolve when done
           }
         });
       });
+    };
 
-    // Wait for the parsing to finish
-    await parsePdf();
+    try {
+      await parseFile();
+    } catch (error) {
+      console.error("An error occurred while parsing the file:", error);
+    }
 
     const cVData = await readCVTextIntoSchema(fullString);
 
@@ -122,6 +127,7 @@ export default function Upload() {
               </label>
               <input
                 id="file-upload"
+                accept="application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.oasis.opendocument.text"
                 type="file"
                 name="file-upload"
                 required
@@ -131,7 +137,7 @@ export default function Upload() {
           </Form>
           <div className="relative top-2 left-24 flex flex-row justify-between">
             <span className="text-gray-700 text-xs leading-tight">
-              Supported formats: DOC, DOCX, PDF
+              Supported formats: PDF, DOCX, ODT, PPT, XLSX
             </span>
             <span className="text-gray-700 text-xs font-medium">
               Maximum size: 5 MB

@@ -89,3 +89,5 @@ export const resumeSchema = z.object({
     })
   ).optional(),
 });
+
+export type resumeType = z.infer<typeof resumeSchema>
