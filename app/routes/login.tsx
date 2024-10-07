@@ -11,8 +11,8 @@ import { createUserSession, getUserId } from "../session.server";
 import { validateEmail } from "../utils";
 import { Button } from "../components/ui/button";
 
-import logo from '../../public/logo.svg'
-import triangles from '../../public/login triangles.svg'
+import logo from "../../public/logo.svg";
+import triangles from "../../public/login triangles.svg";
 
 export const meta: MetaFunction = () => {
   return [
@@ -49,14 +49,14 @@ export const action: ActionFunction = async ({ request }) => {
   if (typeof password !== "string") {
     return json(
       { errors: { password: "Valid password is required." } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   if (password.length < 6) {
     return json(
       { errors: { password: "Password is too short" } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -65,7 +65,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (!user) {
     return json(
       { errors: { email: "Invalid email or password" } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -98,11 +98,7 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="w-full max-w-2xl p-8">
-        <img
-          src={logo}
-          alt="Logo"
-          className="absolute top-16 left-24"
-        />
+        <img src={logo} alt="Logo" className="absolute top-16 left-24" />
 
         <Form
           method="post"
@@ -153,16 +149,36 @@ export default function Login() {
             />
           </div>
           <Button
-            className="w-full rounded bg-cyan-900 py-2 px-4 text-white hover:bg-cyan-950 focus:bg-cyan-700"
+            className="w-full rounded bg-cyan-700 py-2 px-4 text-white hover:bg-cyan-800 focus:bg-cyan-900 "
             type="submit"
           >
             Log in
           </Button>
           <input type="hidden" name="redirectTo" value={redirectTo} />
+          <div className="text-center">
+            <span className="my-5">or continue with</span>
+          </div>
+          <div className="flex justify-between">
+            <Button variant="outline" >
+              <img src="/github.svg" className="mr-2" />
+              Github
+            </Button>
+            <Button variant="outline">
+              <img src="/google.svg" className="mr-2" />
+              Google
+            </Button>
+            <Button variant="outline">
+              <img src="/facebook.svg" className="mr-2" />
+              Facebook
+            </Button>
+          </div>
           <div className="flex items-center justify-between">
             <div className="text-center mt-6 text-gray-500">
               Don't have an account?{" "}
-              <Link className="text-cyan-900 hover:text-cyan-700 focus:text-cyan-950" to={{ pathname: "/join" }}>
+              <Link
+                className="text-cyan-900 hover:text-cyan-700 focus:text-cyan-950"
+                to={{ pathname: "/join" }}
+              >
                 Sign Up
               </Link>
             </div>
