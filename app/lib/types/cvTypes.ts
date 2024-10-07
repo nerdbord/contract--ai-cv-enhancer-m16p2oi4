@@ -35,3 +35,9 @@ export interface CvObjI {
     degreeAndMajor: string;
   }>;
 }
+
+export type ColorScheme = {
+  lineColor: string;
+  backgroundColor: string;
+  name: string;
+};
