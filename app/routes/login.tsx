@@ -11,8 +11,11 @@ import { createUserSession, getUserId } from "../session.server";
 import { validateEmail } from "../utils";
 import { Button } from "../components/ui/button";
 
-import logo from "../../public/logo.svg";
-import triangles from "../../public/login triangles.svg";
+import logo from "/logo.svg";
+import github from "/github.svg";
+import google from "/google.svg";
+import facebook from "/facebook.svg";
+import triangles from "/login triangles.svg";
 
 export const meta: MetaFunction = () => {
   return [
@@ -160,15 +163,15 @@ export default function Login() {
           </div>
           <div className="flex justify-between">
             <Button variant="outline" >
-              <img src="/github.svg" className="mr-2" />
+              <img src={github} className="mr-2" />
               Github
             </Button>
             <Button variant="outline">
-              <img src="/google.svg" className="mr-2" />
+              <img src={google} className="mr-2" />
               Google
             </Button>
             <Button variant="outline">
-              <img src="/facebook.svg" className="mr-2" />
+              <img src={facebook} className="mr-2" />
               Facebook
             </Button>
           </div>
