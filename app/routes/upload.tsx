@@ -39,33 +39,24 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   try {
-    let fullString = "";
     const fileBuffer = Buffer.from(await file.arrayBuffer());
 
     const parseFile = () => {
-      return new Promise((resolve, reject) => {
+      return new Promise<string>((resolve, reject) => {
         parseOffice(fileBuffer, (value: any, error: any) => {
           if (error) {
             console.error("error: ", error);
             reject(error); // Handle the error
-          } else if (!value) {
-            console.warn("end of buffer");
-            resolve(null); // Resolve when there's no more data
-          } else if (value) {
-            fullString += value; // Accumulate the text
-            resolve(fullString); // Resolve when done
+          } else {
+            resolve(value); // Resolve when done
           }
         });
       });
     };
 
-    try {
-      await parseFile();
-    } catch (error) {
-      console.error("An error occurred while parsing the file:", error);
-    }
+    const resolvedString = await parseFile();
 
-    const cVData = await readCVTextIntoSchema(fullString);
+    const cVData = await readCVTextIntoSchema(resolvedString);
 
     const parsedCV = resumeSchema.safeParse(cVData.object);
 
