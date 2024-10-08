@@ -23,8 +23,9 @@
     "ai": "^3.4.9",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "html-pdf-node": "^1.0.8",
+    "emitter": "^0.0.5",
     "file-url": "^4.0.0",
+    "html-pdf-node": "^1.0.8",
     "isbot": "^4.1.0",
     "lucide-react": "^0.447.0",
     "mammoth": "^0.3.0",
@@ -62,8 +63,8 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.6.1",
-    "@esbuild/linux-x64": "^0.24.0"
+    "@esbuild/linux-x64": "^0.24.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.6.1"
   },
   "engines": {
     "node": ">=18.0.0"
