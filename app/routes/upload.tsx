@@ -29,7 +29,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  // console.log("action function has started");
 
   const formData = await request.formData();
   const file = formData.get("file-upload") as File;
@@ -56,22 +55,22 @@ export const action: ActionFunction = async ({ request }) => {
 
     const resolvedString = await parseFile();
 
-    const cVData = await readCVTextIntoSchema(resolvedString);
+    //const cVData = await readCVTextIntoSchema(resolvedString);
 
-    const parsedCV = resumeSchema.safeParse(cVData.object);
+    //const parsedCV = resumeSchema.safeParse(cVData.object);
 
-    if (!parsedCV.success) {
-      return json(
-        { error: "Failed to parse CV data", issues: parsedCV.error.errors },
-        { status: 400 }
-      );
-    }
+    // if (!parsedCV.success) {
+    //   return json(
+    //     { error: "Failed to parse CV data", issues: parsedCV.error.errors },
+    //     { status: 400 }
+    //   );
+    // }
 
     const session = await getSession(request);
-    session.set("cvData", parsedCV);
+    session.set("cvData", resolvedString);
 
     // If everything is fine, return the parsed CV data
-    return redirect("/result", {
+    return redirect("/parser", {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
