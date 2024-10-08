@@ -63,3 +63,10 @@ export async function verifyLogin(email: string, password: string) {
 
   return profile;
 }
+
+export async function signInWithFigma() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'figma',
+    })
+  }
+  
