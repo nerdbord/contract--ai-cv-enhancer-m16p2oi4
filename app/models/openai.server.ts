@@ -1,7 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateObject, generateText } from "ai";
 import invariant from "tiny-invariant";
-import { resumeSchema } from "~/types/resume";
+import { cvSchema, resumeSchema, resumeType } from "~/types/resume";
 
 const openaiApiKey = process.env.OPENAI_API_KEY;
 
@@ -28,7 +28,8 @@ export const generateAiBodyText = async (prompt: string) => {
 export const readCVTextIntoSchema = async (parsedResume: string) => {
   return generateObject({
     model: openaiClient("gpt-4-turbo"),
-    system: "You will be provided with data parsed from a pdf file. Your task is to read the data, and fill out the schema as per info from the data.",
+    system:
+      "You will be provided with data parsed from a pdf file. Your task is to read the data, and fill out the schema as per info from the data.",
     prompt: parsedResume,
     schema: resumeSchema,
   });
@@ -51,6 +52,48 @@ export const readCVFileIntoSchema = async (
           },
         ],
       },
+    ],
+  });
+};
+
+export const transformCVBasedOnOffer = async (
+  resumeObject: string,
+  parsedWebsite: string
+) => {
+  return generateObject({
+    model: openaiClient("gpt-4-turbo"),
+    schema: cvSchema,
+    output: "object",
+    messages: [
+      {
+        role: "system",
+        content: `You will be provided with two prompts from the user. 
+        The first one will be text of a job offer they are applying to, and the second one will be the contents of their resume.
+        Your job is to fill out the resume schema, fine-tuning the resume in a way fitting to that specific offer.`,
+      },
+      { role: "user", content: parsedWebsite },
+      { role: "user", content: resumeObject },
+    ],
+  });
+};
+
+export const enhanceCVBasedOnOffer = async (
+  resumeObject: string,
+  parsedWebsite: string
+) => {
+  return generateObject({
+    model: openaiClient("gpt-4-turbo"),
+    schema: cvSchema,
+    output: "object",
+    messages: [
+      {
+        role: "system",
+        content: `You will be provided with two prompts from the user. 
+        The first one will be text of a job offer they are applying to, and the second one will be the contents of their resume.
+        Your job is to fill out the resume schema by upgrading the resume a little bit. You can make stuff up, but don't go crazy.`,
+      },
+      { role: "user", content: parsedWebsite },
+      { role: "user", content: JSON.stringify(resumeObject) },
     ],
   });
 };
