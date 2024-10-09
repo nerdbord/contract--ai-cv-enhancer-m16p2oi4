@@ -55,17 +55,6 @@ export const action: ActionFunction = async ({ request }) => {
 
     const resolvedString = await parseFile();
 
-    //const cVData = await readCVTextIntoSchema(resolvedString);
-
-    //const parsedCV = resumeSchema.safeParse(cVData.object);
-
-    // if (!parsedCV.success) {
-    //   return json(
-    //     { error: "Failed to parse CV data", issues: parsedCV.error.errors },
-    //     { status: 400 }
-    //   );
-    // }
-
     const session = await getSession(request);
     session.set("cvData", resolvedString);
 

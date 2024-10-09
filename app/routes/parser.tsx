@@ -13,6 +13,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import puppeteer from "puppeteer";
 import { transformCVBasedOnOffer } from "~/models/openai.server";
+import { cvSchema, resumeSchema } from "~/types/resume";
 
 export const meta: MetaFunction = () => {
   return [
@@ -47,17 +48,19 @@ export const action: ActionFunction = async ({ request }) => {
     }
     return "";
   });
-  //console.log(extractedText);
+  console.log(extractedText);
   const session = await getSession(request)
   const cvData = session.get("cvData")
 
   await browser.close();
-
   const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText)
-  console.log(finetunedCV);
+  const parsedFineTunedCV = resumeSchema.safeParse(finetunedCV.object).data
+  console.log(parsedFineTunedCV);
   
   session.unset('cvData')
-  session.set("fine-tuned", finetunedCV)
+  await commitSession(session)
+  session.set("fine-tuned", parsedFineTunedCV
+  )
 
   return redirect("/result", {
     headers: {
