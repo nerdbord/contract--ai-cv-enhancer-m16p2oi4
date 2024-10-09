@@ -13,6 +13,8 @@ import { resumeSchema } from "~/types/resume";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { parseOffice } from "officeparser";
+import path from "path";
+import { promises as fsPromises } from "fs";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,7 +31,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-
   const formData = await request.formData();
   const file = formData.get("file-upload") as File;
 
@@ -40,7 +41,23 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     const fileBuffer = Buffer.from(await file.arrayBuffer());
 
-    const parseFile = () => {
+    const parseFile = async () => {
+      // Use `/tmp` in production (Netlify), otherwise use a local directory
+      const tempDir =
+        process.env.NODE_ENV === "production"
+          ? "/tmp/officeParserTemp/tempfiles" // Netlify writable directory
+          : path.join(process.cwd(), "officeParserTemp/tempfiles"); // Local writable directory
+
+      console.log("Using temp directory:", tempDir);
+
+      try {
+        // Ensure the directory exists
+        await fsPromises.mkdir(tempDir, { recursive: true });
+      } catch (error) {
+        console.error("Error creating temp directory:", error);
+        throw new Error("Failed to create temp directory for file parsing.");
+      }
+
       return new Promise<string>((resolve, reject) => {
         parseOffice(fileBuffer, (value: any, error: any) => {
           if (error) {
