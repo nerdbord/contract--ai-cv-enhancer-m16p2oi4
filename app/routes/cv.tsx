@@ -1,6 +1,6 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { ColorScheme } from "~/lib/types/cvTypes";
+import { ColorScheme, CvObjI } from "~/lib/types/cvTypes";
 import { generateCvHtmlMarkup } from "~/lib/generateCvHtmlMarkup";
 import { useEffect, useState } from "react";
 import { cvData } from "~/lib/mock/cvData";
@@ -12,6 +12,33 @@ const colorSchemes: ColorScheme[] = [
   { lineColor: "#3730A3", backgroundColor: "#EEF2FF", name: "indygo" },
   { lineColor: "#86198F", backgroundColor: "#FDF4FF", name: "fuchsia" },
 ];
+const generateNewPdf = (cvData: CvObjI, colorScheme: ColorScheme) => {
+  const htmlContent = generateCvHtmlMarkup(cvData, colorScheme);
+
+  return new Promise<Buffer>((resolve, reject) => {
+    htmlPdf.generatePdf(
+      { content: htmlContent },
+      {
+        format: "A4",
+        printBackground: true,
+        margin: {
+          top: "18mm",
+          left: "15mm",
+          right: "14.25mm",
+          bottom: "18mm",
+        },
+      },
+      (err: Error, buffer: Buffer) => {
+        if (err) {
+          console.error("error: ", err);
+          reject(err);
+        } else {
+          resolve(buffer);
+        }
+      }
+    );
+  });
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -27,15 +54,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   try {
-    const htmlContent = generateCvHtmlMarkup(cvData, colorScheme);
-    const pdfBuffer = await htmlPdf.generatePdf(
-      { content: htmlContent },
-      {
-        format: "A4",
-        printBackground: true,
-        margin: { top: "18mm", left: "15mm", right: "14.25mm", bottom: "18mm" },
-      }
-    );
+    const pdfBuffer = await generateNewPdf(cvData, colorScheme);
     // console.log("PDF Buffer length:", pdfBuffer.length);
     const base64Pdf = pdfBuffer.toString("base64");
 
