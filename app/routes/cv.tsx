@@ -6,11 +6,16 @@ import { useEffect, useState } from "react";
 import { cvData } from "~/lib/mock/cvData";
 import { useFetcher } from "@remix-run/react";
 import htmlPdf from "html-pdf-node";
+import clsx from "clsx";
 
 const colorSchemes: ColorScheme[] = [
   { lineColor: "#075985", backgroundColor: "#E0F2FE", name: "sky" },
   { lineColor: "#3730A3", backgroundColor: "#EEF2FF", name: "indygo" },
   { lineColor: "#86198F", backgroundColor: "#FDF4FF", name: "fuchsia" },
+  { lineColor: "#9D174D", backgroundColor: "#FFF1F2", name: "rose" },
+  { lineColor: "#9A3412", backgroundColor: "#FFF7ED", name: "orange" },
+  { lineColor: "#92400E", backgroundColor: "#FFFBEB", name: "amber" },
+  { lineColor: "#166534", backgroundColor: "#F0FDF4", name: "green" },
 ];
 const generateNewPdf = (cvData: CvObjI, colorScheme: ColorScheme) => {
   const htmlContent = generateCvHtmlMarkup(cvData, colorScheme);
@@ -120,41 +125,71 @@ export default function CvPdfGeneratorPage() {
   };
 
   return (
-    <div>
-      <h1 className="font-">CV PDF Generator</h1>
-      <div>
-        {colorSchemes.map((scheme) => (
-          <button
-            key={scheme.name}
-            onClick={() => setSelectedScheme(scheme.name)}
-            style={{
-              backgroundColor: scheme.backgroundColor,
-              color: scheme.lineColor,
-              margin: "5px",
-              padding: "10px",
-              border: `1px solid ${scheme.lineColor}`,
-            }}
-          >
-            {scheme.name}
+    <>
+      <div className="h-[152px] flex justify-between items-center px-[96px]">
+        <h1 className="font-">CV PDF Generator</h1>
+        <div>USER NAME</div>
+      </div>
+      <div className="flex ml-[96px]">
+        <div className="w-[318px]">
+          <div className="mb-[24px]">
+            <h4 className="font-semibold text-xl mb-[8px]">Job title name</h4>
+            <p className="font-light text-base">Company name</p>{" "}
+          </div>
+          <button className="text-cyan-900 border-cyan-900 border rounded-[6px] px-[5.5px] py-[8px]">
+            Change URL
           </button>
-        ))}
-      </div>
+        </div>
+        <div className="flex flex-col pt-[88px] items-center mr-[24px]">
+          <p className="text-center font-semibold mb-[40px]">Color</p>
+          {colorSchemes.map((scheme) => (
+            <button
+              key={scheme.name}
+              onClick={() => setSelectedScheme(scheme.name)}
+              className={clsx(
+                "rounded-full w-[64px] aspect-square border-[8px]",
+                `bg-[${scheme.backgroundColor}]`,
+                selectedScheme === scheme.name && `border-[${scheme.lineColor}]`
+              )}
+              style={{
+                backgroundColor: scheme.backgroundColor,
+                borderColor: `${
+                  selectedScheme === scheme.name ? scheme.lineColor : "white"
+                }`,
+              }}
+            ></button>
+          ))}
+        </div>
 
-      <div className="w-full flex justify-center">
-        {pdfUrl && (
-          <iframe
-            src={`${pdfUrl}#toolbar=0&navpanes=0&view=FitH`}
-            width="800px"
-            height="1104px"
-            style={{ border: "none", backgroundColor: "white" }}
-            title="cv"
-            data-toolbar="false"
-            data-navpanes="false"
-          />
-        )}
+        <div className="flex items-end flex-col mb-[16px]">
+          {true ? ( //TODO:
+            <button
+              className="mb-[24px] text-white bg-cyan-700 rounded-[6px] py-[8px] px-[12px]"
+              onClick={downloadPdf}
+            >
+              Download
+            </button>
+          ) : (
+            <button
+              className="mb-[24px] text-white bg-cyan-700 rounded-[6px] py-[8px] px-[20px]"
+              onClick={() => console.log("redirect to login")}
+            >
+              Log in to Download
+            </button>
+          )}
+          {pdfUrl && (
+            <iframe
+              src={`${pdfUrl}#toolbar=0&navpanes=0&view=FitH`}
+              width="800px"
+              height="1104px"
+              style={{ border: "none", backgroundColor: "white" }}
+              title="cv"
+              data-toolbar="false"
+              data-navpanes="false"
+            />
+          )}
+        </div>
       </div>
-
-      <button onClick={downloadPdf}>Download PDF</button>
-    </div>
+    </>
   );
 }
