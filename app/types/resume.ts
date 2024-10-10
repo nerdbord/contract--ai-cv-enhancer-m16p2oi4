@@ -121,10 +121,10 @@ export const cvSchema = z.object({
   surname: z.string(),
   professionalTitle: z.string(),
   contact: z.object({
-    phone: z.string(),
+    phone: z.string().optional(),
     email: z.string().email(),
-    linkedin: z.string().url(),
-    portfolio: z.string().url(),
+    linkedin: z.string().optional(),
+    portfolio: z.string().optional(),
   }),
   profile: z.string(),
   skills: z.array(z.string()),
@@ -139,13 +139,13 @@ export const cvSchema = z.object({
       name: z.string(),
       date: z.string(), // Consider using z.date() if you want to handle actual date objects
     })
-  ),
+  ).optional(),
   awards: z.array(
     z.object({
       name: z.string(),
       date: z.string(),
     })
-  ),
+  ).optional(),
   workExperience: z.array(
     z.object({
       jobTitle: z.string(),
@@ -153,7 +153,7 @@ export const cvSchema = z.object({
       dates: z.string(),
       responsibilities: z.array(z.string()),
     })
-  ),
+  ).optional(),
   education: z.array(
     z.object({
       dates: z.string(),
@@ -161,7 +161,7 @@ export const cvSchema = z.object({
       location: z.string(),
       degreeAndMajor: z.string(),
     })
-  ),
+  ).optional(),
 });
 
 export type resumeType = z.infer<typeof resumeSchema>;

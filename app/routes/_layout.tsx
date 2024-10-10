@@ -1,11 +1,16 @@
-import { Link, redirect } from "@remix-run/react";
+import { Link, redirect, useLocation } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { useOptionalUser } from "~/utils";
+import logo from "/logo.svg";
+import loginTriangles from "/login triangles.svg";
+import loadingTriangles from "/loading triangles.svg";
+import mainTriangles from "/main triangles.svg";
 
-export default function Index() {
-
+export default function Layout() {
   const user = useOptionalUser();
+  const location = useLocation();
+  const currentUrl = location.pathname;
 
   return (
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
