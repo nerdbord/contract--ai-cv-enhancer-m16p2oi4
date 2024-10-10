@@ -12,7 +12,7 @@ import { readCVTextIntoSchema } from "~/models/openai.server";
 import { resumeSchema } from "~/types/resume";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
-import { parseOffice } from "officeparser";
+import { OfficeParserConfig, parseOffice } from "officeparser";
 import path from "path";
 import { promises as fsPromises } from "fs";
 
@@ -40,21 +40,11 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     const fileBuffer = Buffer.from(await file.arrayBuffer());
+    const config: OfficeParserConfig = {
+      tempFilesLocation: "/tmp"
+    }
 
-    const parseFile = async () => {
-      // Use `/tmp` in production (Netlify), otherwise use a local directory for local development
-      const tempDir = '/tmp/officeParserTemp/tempfiles';
-    
-      console.log("Using temp directory:", tempDir);
-    
-      try {
-        // Ensure the directory exists in the writable location
-        await fsPromises.mkdir(tempDir, { recursive: true });
-      } catch (error) {
-        console.error("Error creating temp directory:", error);
-        throw new Error("Failed to create temp directory for file parsing.");
-      }
-    
+    const parseFile = async () => {  
       return new Promise<string>((resolve, reject) => {
         parseOffice(fileBuffer, (value: any, error: any) => {
           if (error) {
@@ -63,7 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
           } else {
             resolve(value);
           }
-        });
+        }, config);
       });
     };
 
