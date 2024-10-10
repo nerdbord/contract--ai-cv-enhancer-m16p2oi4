@@ -6,6 +6,9 @@ import { netlifyPlugin } from "@netlify/remix-adapter/plugin";
 export default defineConfig({
   build: {
     target: "esnext",
+    rollupOptions: {
+      external: ["emitter"],
+    },
   },
   plugins: [
     remix({
