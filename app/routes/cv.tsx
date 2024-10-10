@@ -162,7 +162,7 @@ export default function CvPdfGeneratorPage() {
         </div>
 
         <div className="flex items-end flex-col mb-[16px]">
-          {true ? ( //TODO:
+          {pdfUrl ? ( //TODO:
             <button
               className="mb-[24px] text-white bg-cyan-700 rounded-[6px] py-[8px] px-[12px]"
               onClick={downloadPdf}
