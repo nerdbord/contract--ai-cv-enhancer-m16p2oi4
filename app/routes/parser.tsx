@@ -11,7 +11,8 @@ import triangles from "/main triangles.svg";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+
 import { transformCVBasedOnOffer } from "~/models/openai.server";
 import { cvSchema, resumeSchema } from "~/types/resume";
 
@@ -37,7 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
   });
   const page = await browser.newPage();
   await page.goto(url as string);
-  const extractedText = await page.$eval("*", (el) => {
+  const extractedText = await page.$eval("*", (el: Node) => {
     const selection = window.getSelection();
     if (selection) {
       const range = document.createRange();
