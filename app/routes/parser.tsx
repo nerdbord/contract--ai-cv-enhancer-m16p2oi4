@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium"
 
 import { transformCVBasedOnOffer } from "~/models/openai.server";
 import { cvSchema, resumeSchema } from "~/types/resume";
@@ -31,10 +32,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  chromium.setHeadlessMode = true;
+
   const formData = await request.formData();
   const url = formData.get("url-string");
   const browser = await puppeteer.launch({
-    headless: true,
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath('/var/task/node_modules/@sparticuz/chromium/bin')),
+    headless: chromium.headless == "new" ? true : "shell",
   });
   const page = await browser.newPage();
   await page.goto(url as string);
