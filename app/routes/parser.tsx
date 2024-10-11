@@ -12,10 +12,11 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium"
+import chromium from "@sparticuz/chromium";
 
 import { transformCVBasedOnOffer } from "~/models/openai.server";
 import { cvSchema, resumeSchema } from "~/types/resume";
+import { getWebsiteText } from "netlify/functions/dataScraper";
 
 export const meta: MetaFunction = () => {
   return [
@@ -32,42 +33,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  chromium.setHeadlessMode = true;
-
+  const session = await getSession(request);
+  const cvData = session.get("cvData");
   const formData = await request.formData();
   const url = formData.get("url-string");
-  const browser = await puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath('/var/task/node_modules/@sparticuz/chromium/bin')),
-    headless: chromium.headless == "new" ? true : "shell",
-  });
-  const page = await browser.newPage();
-  await page.goto(url as string);
-  const extractedText = await page.$eval("*", (el: Node) => {
-    const selection = window.getSelection();
-    if (selection) {
-      const range = document.createRange();
-      range.selectNode(el);
-      selection.removeAllRanges();
-      selection.addRange(range);
-      return selection.toString();
-    }
-    return "";
-  });
-  console.log(extractedText);
-  const session = await getSession(request)
-  const cvData = session.get("cvData")
 
-  await browser.close();
-  const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText)
-  const parsedFineTunedCV = resumeSchema.safeParse(finetunedCV.object).data
-  console.log(parsedFineTunedCV);
+  const extractedText = await getWebsiteText(url as string)
   
-  session.unset('cvData')
-  await commitSession(session)
-  session.set("fine-tuned", parsedFineTunedCV
-  )
+  const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText);
+  const parsedFineTunedCV = resumeSchema.safeParse(finetunedCV.object).data;
+  console.log(parsedFineTunedCV);
+
+  session.unset("cvData");
+  await commitSession(session);
+  session.set("fine-tuned", parsedFineTunedCV);
 
   return redirect("/result", {
     headers: {
