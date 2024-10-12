@@ -1,17 +1,11 @@
 import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium";
-
-chromium.setHeadlessMode = true;
-chromium.setGraphicsMode = false;
 
 export async function getWebsiteText(url: string) {
+  console.log("Received URL: ", url);
+
   const browser = await puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath:
-      //   process.env.CHROME_EXECUTABLE_PATH ||
-      await chromium.executablePath(),
-    headless: chromium.headless == "new" ? true : "shell",
+    executablePath: process.env.CHROME_PATH,
+    headless: true,
   });
 
   const page = await browser.newPage();
@@ -29,6 +23,7 @@ export async function getWebsiteText(url: string) {
   });
 
   await browser.close();
+  console.log("Extracted text: ", extractedText);
 
   return extractedText;
 }

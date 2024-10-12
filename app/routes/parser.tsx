@@ -11,8 +11,6 @@ import triangles from "/main triangles.svg";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium";
 
 import { transformCVBasedOnOffer } from "~/models/openai.server";
 import { cvSchema, resumeSchema } from "~/types/resume";
@@ -37,12 +35,13 @@ export const action: ActionFunction = async ({ request }) => {
   const cvData = session.get("cvData");
   const formData = await request.formData();
   const url = formData.get("url-string");
+  console.log("Action URL: ", url);
 
-  const extractedText = await getWebsiteText(url as string)
+  const extractedText = await getWebsiteText(url as string);
   
   const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText);
   const parsedFineTunedCV = resumeSchema.safeParse(finetunedCV.object).data;
-  console.log(parsedFineTunedCV);
+  console.log("Parsed: ",parsedFineTunedCV);
 
   session.unset("cvData");
   await commitSession(session);
