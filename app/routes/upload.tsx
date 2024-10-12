@@ -40,12 +40,9 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     const fileBuffer = Buffer.from(await file.arrayBuffer());
-    const config: OfficeParserConfig =
-      process.env.NODE_ENV === "production"
-        ? {
-            tempFilesLocation: "/tmp",
-          }
-        : {};
+    const config: OfficeParserConfig = {
+      tempFilesLocation: "/tmp",
+    };
 
     const parseFile = async () => {
       return new Promise<string>((resolve, reject) => {
