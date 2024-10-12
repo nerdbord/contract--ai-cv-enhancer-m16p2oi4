@@ -40,20 +40,27 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     const fileBuffer = Buffer.from(await file.arrayBuffer());
-    const config: OfficeParserConfig = {
-      tempFilesLocation: "/tmp"
-    }
-
-    const parseFile = async () => {  
-      return new Promise<string>((resolve, reject) => {
-        parseOffice(fileBuffer, (value: any, error: any) => {
-          if (error) {
-            console.error("[OfficeParser] Error: ", error);
-            reject(error);
-          } else {
-            resolve(value);
+    const config: OfficeParserConfig =
+      process.env.NODE_ENV === "production"
+        ? {
+            tempFilesLocation: "/tmp",
           }
-        }, config);
+        : {};
+
+    const parseFile = async () => {
+      return new Promise<string>((resolve, reject) => {
+        parseOffice(
+          fileBuffer,
+          (value: any, error: any) => {
+            if (error) {
+              console.error("[OfficeParser] Error: ", error);
+              reject(error);
+            } else {
+              resolve(value);
+            }
+          },
+          config
+        );
       });
     };
 

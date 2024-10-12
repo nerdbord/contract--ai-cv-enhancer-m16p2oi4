@@ -9,7 +9,8 @@ export async function getWebsiteText(url: string) {
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     executablePath:
-      process.env.CHROME_EXECUTABLE_PATH || (await chromium.executablePath()),
+      //   process.env.CHROME_EXECUTABLE_PATH ||
+      await chromium.executablePath(),
     headless: chromium.headless == "new" ? true : "shell",
   });
 
