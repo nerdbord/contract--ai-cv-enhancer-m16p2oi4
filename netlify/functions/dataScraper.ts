@@ -1,5 +1,4 @@
 import puppeteer from "puppeteer-core";
-import path from "path";
 
 export async function getWebsiteText(url: string) {
   console.log("CHROME_PATH:", process.env.CHROME_PATH);
@@ -8,10 +7,7 @@ export async function getWebsiteText(url: string) {
   const browser = await puppeteer.launch({
     executablePath:
       process.env.CHROME_PATH ||
-      path.join(
-        process.cwd(),
-        "node_modules/chromium/lib/chromium/chrome-linux/chrome"
-      ),
+      process.cwd() + "/node_modules/chromium/lib/chromium/chrome-linux/chrome",
     headless: true,
   });
 
