@@ -4,7 +4,9 @@ export async function getWebsiteText(url: string) {
   console.log("Received URL: ", url);
 
   const browser = await puppeteer.launch({
-    executablePath: process.env.CHROME_PATH,
+    executablePath:
+      process.env.CHROME_PATH ||
+      "/opt/build/repo/node_modules/chromium/lib/chromium/chrome-linux/chrome",
     headless: true,
   });
 
