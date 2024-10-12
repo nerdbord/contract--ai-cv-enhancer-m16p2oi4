@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer-core";
 
 export async function getWebsiteText(url: string) {
+  console.log("CHROME_PATH:", process.env.CHROME_PATH);
   console.log("Received URL: ", url);
 
   const browser = await puppeteer.launch({
