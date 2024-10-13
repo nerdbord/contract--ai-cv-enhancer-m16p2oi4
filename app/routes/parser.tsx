@@ -65,16 +65,19 @@ export default function Parser() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev < 95) {
-          return prev + 5; // Increment progress (you can adjust the speed here)
-        }
-        return prev;
-      });
-    }, 250); // Update progress every 200ms
+    if (isLoading) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev < 95) {
+            return prev + 5; // Increment progress (adjust the speed here)
+          }
+          return prev;
+        });
+      }, 250); // Update progress every 250ms
 
-    return () => clearInterval(interval);
+      // Cleanup interval when loading completes or component unmounts
+      return () => clearInterval(interval);
+    }
   }, [isLoading]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
