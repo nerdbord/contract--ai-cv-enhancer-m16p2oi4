@@ -1,12 +1,19 @@
-import { Link, redirect } from "@remix-run/react";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import { json, Link, redirect } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { getNoteListItems } from "~/models/note.server";
+import { requireUserId } from "~/session.server";
 import { useOptionalUser } from "~/utils";
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userId = await requireUserId(request);
+  if (userId) return redirect("/upload");
+  return json({});
+}
+
 export default function Index() {
-
   const user = useOptionalUser();
-
   return (
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
       <div className="relative sm:pb-16 sm:pt-8">

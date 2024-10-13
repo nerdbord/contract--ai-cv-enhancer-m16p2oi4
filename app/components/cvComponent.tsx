@@ -1,13 +1,15 @@
 import { Link } from "@remix-run/react";
 import React from "react";
+import { Colors } from "~/types/color";
 import { cvType, resumeType } from "~/types/resume";
 import { appendHttps } from "~/utils";
 
 interface CVProps {
   data: cvType;
+  color: Colors
 }
 
-const CVComponent = ({ data }: CVProps) => {
+const CVComponent = ({ data, color }: CVProps) => {
   const {
     name,
     surname,
@@ -20,13 +22,13 @@ const CVComponent = ({ data }: CVProps) => {
   } = data;
 
   return (
-    <div className="w-full h-auto relative bg-white border-4 border-sky-50 p-6">
+    <div className={`w-full h-auto relative bg-white border-4 border-${color}-50 p-6`}>
       {/* Header with Name and Professional Title */}
       <div className="text-center mb-4">
-        <h1 className="text-slate-800 text-3xl font-semibold font-['Inter'] border-b border-sky-800 pb-2 mb-2">
+        <h1 className={`text-slate-800 text-3xl font-semibold font-['Inter'] border-b border-${color}-800 pb-2 mb-2`}>
           {name} {surname}
         </h1>
-        <div className="text-black text-xl font-normal font-['Inter'] border-b border-sky-800 pb-2">
+        <div className={`text-black text-xl font-normal font-['Inter'] border-b border-${color}-800 pb-2`}>
           {professionalTitle}
         </div>
       </div>
@@ -35,8 +37,8 @@ const CVComponent = ({ data }: CVProps) => {
       <div className="flex">
         {/* Left Sidebar */}
         <div className="w-2/5 pr-4">
-          <div className="w-full h-auto p-2 bg-sky-50 rounded-lg">
-            <div className="font-['Inter'] text-black text-base font-medium leading-normal border-b border-sky-800 mb-3">
+          <div className={`w-full h-auto p-2 bg-${color}-50 rounded-lg`}>
+            <div className={`font-['Inter'] text-black text-base font-medium leading-normal border-b border-${color}-800 mb-3`}>
               CONTACT
             </div>
             <div className="text-black text-sm font-medium font-['Inter'] leading-tight mb-2">
@@ -69,7 +71,7 @@ const CVComponent = ({ data }: CVProps) => {
                 </div>
               )}
             </div>
-            <div className="border-b border-sky-800 my-3">
+            <div className={`border-b border-${color}-800 my-3`}>
               <div className="text-black text-base font-medium font-['Inter'] leading-normal">
                 SKILLS
               </div>
@@ -79,7 +81,7 @@ const CVComponent = ({ data }: CVProps) => {
                 <li key={index}>{skill}</li>
               ))}
             </ul>
-            <div className="border-b border-sky-800 my-3">
+            <div className={`border-b border-${color}-800 my-3`}>
               <div className="text-black text-base font-medium font-['Inter'] leading-normal">
                 LANGUAGES
               </div>
@@ -95,7 +97,7 @@ const CVComponent = ({ data }: CVProps) => {
         {/* Right Main Content */}
         <div className="w-2/3">
           <div className="mb-4">
-            <div className="text-black text-base font-medium font-medium-['Inter'] leading-normal mb-4 border-b border-sky-800">
+            <div className={`text-black text-base font-medium font-medium-['Inter'] leading-normal mb-4 border-b border-${color}-800`}>
               PROFILE
             </div>
             <div className="text-justify text-black text-xs font-medium font-['Inter'] leading-tight mb-4">
@@ -103,7 +105,7 @@ const CVComponent = ({ data }: CVProps) => {
             </div>
           </div>
 
-          <div className="w-full border-b border-sky-800 mb-4">
+          <div className={`w-full border-b border-${color}-800 mb-4`}>
             <div className="text-black text-base font-medium font-['Inter'] leading-normal">
               WORK EXPERIENCE
             </div>
