@@ -43,6 +43,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const extractedText = await getWebsiteText(url as string);
 
+  //
   const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText);
 
   const parsedFineTunedCV = cvSchema.safeParse(finetunedCV.object).data;
