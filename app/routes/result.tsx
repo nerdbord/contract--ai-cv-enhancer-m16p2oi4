@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Result() {
   const { fineTunedData } = useLoaderData<typeof loader>();
-  const typedData: resumeType = fineTunedData;
+  const typedData: cvType = fineTunedData;
   // const typedData: cvType = mockCVData;
   // return <CVComponent data={typedData} />;
   return (
