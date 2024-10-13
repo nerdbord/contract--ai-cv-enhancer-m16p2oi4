@@ -38,6 +38,7 @@ export default function Result() {
   // const typedData: cvType = mockCVData;
   const targetRef = useRef(null);
 
+  //handleDownload
   const handleDownload = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
