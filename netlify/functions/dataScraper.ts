@@ -4,13 +4,8 @@ import chromium from '@sparticuz/chromium'
 chromium.setGraphicsMode = false
 
 export async function getWebsiteText(url: string) {
-  console.log("CHROME_PATH:", process.env.CHROME_PATH);
-  console.log("Received URL: ", url);
-
   const executablePath = await chromium.executablePath();
-
-  console.log("executablePath: ", executablePath);
-
+  
   const browser = await puppeteer.launch({
     args: chromium.args,
     executablePath: executablePath,

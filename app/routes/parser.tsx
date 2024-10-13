@@ -13,7 +13,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
 import { transformCVBasedOnOffer } from "~/models/openai.server";
-import { cvSchema, resumeSchema } from "~/types/resume";
+import { resumeSchema } from "~/types/resume";
 import { getWebsiteText } from "netlify/functions/dataScraper";
 
 export const meta: MetaFunction = () => {
