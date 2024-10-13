@@ -5,6 +5,9 @@ import { cvSchema, resumeSchema, resumeType } from "~/types/resume";
 
 const openaiApiKey = process.env.OPENAI_API_KEY;
 
+/* 
+Hey Nerdy, you should find what you're looking for in this file.
+*/
 invariant(
   openaiApiKey,
   "OPENAI_API_KEY must be set in your environment variables."
