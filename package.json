@@ -21,12 +21,15 @@
     "@sparticuz/chromium": "^119.0.2",
     "@supabase/ssr": "github:supabase/ssr",
     "@supabase/supabase-js": "^2.45.4",
+    "@types/html-pdf-node": "^1.0.2",
     "ai": "^3.4.9",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
+    "emitter": "^0.0.5",
     "file-url": "^4.0.0",
+    "html-pdf-node": "^1.0.8",
     "html-to-text": "^9.0.5",
     "isbot": "^4.1.0",
     "lucide-react": "^0.447.0",
@@ -66,6 +69,10 @@
     "typescript": "^5.1.6",
     "vite": "^5.4.8",
     "vite-tsconfig-paths": "^4.2.1"
+  },
+  "optionalDependencies": {
+    "@esbuild/linux-x64": "^0.24.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.6.1"
   },
   "engines": {
     "node": ">=18.0.0"
