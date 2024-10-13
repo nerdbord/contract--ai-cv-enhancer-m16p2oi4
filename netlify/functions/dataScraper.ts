@@ -1,18 +1,18 @@
 import puppeteer from "puppeteer-core";
-import chromium from "chrome-aws-lambda";
+import chromium from '@sparticuz/chromium'
 
 export async function getWebsiteText(url: string) {
   console.log("CHROME_PATH:", process.env.CHROME_PATH);
   console.log("Received URL: ", url);
 
-  const executablePath = await chromium.executablePath;
+  const executablePath = await chromium.executablePath();
 
   console.log("executablePath: ", executablePath);
 
   const browser = await puppeteer.launch({
     args: chromium.args,
     executablePath: executablePath,
-    headless: chromium.headless,
+    headless: "shell",
   });
 
   const page = await browser.newPage();
