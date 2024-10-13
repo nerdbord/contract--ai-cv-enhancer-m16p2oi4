@@ -62,17 +62,18 @@ export const transformCVBasedOnOffer = async (
 ) => {
   return generateObject({
     model: openaiClient("gpt-4-turbo"),
-    schema: resumeSchema,
+    schema: cvSchema,
     output: "object",
     messages: [
       {
         role: "system",
         content: `You will be provided with two prompts from the user. 
         The first one will be text of a job offer they are applying to, and the second one will be the contents of their resume.
-        Your job is to fill out the resume schema, fine-tuning the resume in a way fitting to that specific offer.`,
+        Your job is to create a CV for the user by filling out the provided schema. The CV you create should be based on 
+        the provided resume, but fine-tuned for that specific job offer.`,
       },
-      { role: "user", content: parsedWebsite },
-      { role: "user", content: resumeText },
+      { role: "user", content: `\nThis is the job offer: ${parsedWebsite}\n` },
+      { role: "user", content: `\nThis is the resume: ${resumeText}\n` },
     ],
   });
 };

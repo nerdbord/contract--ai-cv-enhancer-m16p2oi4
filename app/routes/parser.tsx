@@ -11,9 +11,10 @@ import triangles from "/main triangles.svg";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { mockJobOffer } from "~/lib/mock/jobOffer";
 
 import { transformCVBasedOnOffer } from "~/models/openai.server";
-import { resumeSchema } from "~/types/resume";
+import { cvSchema, resumeSchema } from "~/types/resume";
 import { getWebsiteText } from "netlify/functions/dataScraper";
 import { Progress } from "~/components/ui/progress";
 
@@ -44,10 +45,9 @@ export const action: ActionFunction = async ({ request }) => {
 
   const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText);
 
-  const parsedFineTunedCV = resumeSchema.safeParse(finetunedCV.object).data;
+  const parsedFineTunedCV = cvSchema.safeParse(finetunedCV.object).data;
 
   session.unset("cvData");
-
   await commitSession(session);
 
   session.set("fine-tuned", parsedFineTunedCV);
@@ -73,7 +73,7 @@ export default function Parser() {
           }
           return prev;
         });
-      }, 350);
+      }, 1000);
 
       // Cleanup interval when loading completes or component unmounts
       return () => clearInterval(interval);
