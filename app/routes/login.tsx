@@ -31,7 +31,7 @@ interface ActionData {
     password?: string;
   };
 }
-
+// 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await getUserId(request);
   if (userId) return redirect("/");
