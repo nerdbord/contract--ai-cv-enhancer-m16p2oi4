@@ -18,6 +18,7 @@ for = "/build/*"
 
 [functions]
   node_bundler = "esbuild"
-  
+  external_node_modules = ["@sparticuz/chromium"]
+
 [[plugins]]
 package = "netlify-plugin-chromium"

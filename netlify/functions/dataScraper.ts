@@ -1,6 +1,8 @@
 import puppeteer from "puppeteer-core";
 import chromium from '@sparticuz/chromium'
 
+chromium.setGraphicsMode = false
+
 export async function getWebsiteText(url: string) {
   console.log("CHROME_PATH:", process.env.CHROME_PATH);
   console.log("Received URL: ", url);
@@ -12,7 +14,7 @@ export async function getWebsiteText(url: string) {
   const browser = await puppeteer.launch({
     args: chromium.args,
     executablePath: executablePath,
-    headless: "shell",
+    headless: true,
   });
 
   const page = await browser.newPage();
