@@ -73,7 +73,7 @@ export default function Parser() {
           }
           return prev;
         });
-      }, 500);
+      }, 1000);
 
       // Cleanup interval when loading completes or component unmounts
       return () => clearInterval(interval);

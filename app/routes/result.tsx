@@ -6,6 +6,7 @@ import {
   ReactNode,
   ReactPortal,
   Key,
+  useRef,
 } from "react";
 import CVComponent from "~/components/cvComponent";
 import CV from "~/components/cvComponent";
@@ -14,6 +15,7 @@ import { getSession } from "~/session.server";
 import { cvType, resumeType } from "~/types/resume";
 import logo from "/logo.svg";
 import { Button } from "~/components/ui/button";
+import generatePDF from "react-to-pdf";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request);
@@ -31,7 +33,14 @@ export default function Result() {
   const { fineTunedData } = useLoaderData<typeof loader>();
   const typedData: cvType = fineTunedData;
   // const typedData: cvType = mockCVData;
-  // return <CVComponent data={typedData} />;
+  const targetRef = useRef(null);
+
+  const handleDownload = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    generatePDF(() => targetRef.current, { filename: "yourCV.pdf" });
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="w-full max-w-[80vh] z-10">
@@ -41,11 +50,14 @@ export default function Result() {
             type="button"
             variant="default"
             className="bg-cyan-700 hover:bg-cyan-800 focus:bg-cyan-900 mb-6"
+            onClick={handleDownload}
           >
-            Download your CV
+            Print as .pdf
           </Button>
         </div>
-        <CVComponent data={typedData} />
+        <div ref={targetRef}>
+          <CVComponent data={typedData} />
+        </div>
       </div>
     </div>
   );
