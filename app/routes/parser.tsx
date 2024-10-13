@@ -41,7 +41,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const url = formData.get("url-string");
 
-  const extractedText = mockJobOffer // await getWebsiteText(url as string);
+  const extractedText = await getWebsiteText(url as string);
 
   const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText);
 

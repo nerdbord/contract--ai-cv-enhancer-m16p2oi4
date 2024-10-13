@@ -42,7 +42,7 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     const config: OfficeParserConfig = {
-      // tempFilesLocation: "/tmp",
+      tempFilesLocation: "/tmp",
     };
 
     const parseFile = async () => {
