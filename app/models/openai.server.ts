@@ -59,6 +59,7 @@ export const readCVFileIntoSchema = async (
   });
 };
 
+//under this line is the solution to this task
 export const transformCVBasedOnOffer = async (
   resumeText: string,
   parsedWebsite: string
@@ -80,6 +81,7 @@ export const transformCVBasedOnOffer = async (
     ],
   });
 };
+//above this line is the solution to this task
 
 export const enhanceCVBasedOnOffer = async (
   resumeText: string,
