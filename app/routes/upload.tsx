@@ -42,7 +42,7 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     const config: OfficeParserConfig = {
-      tempFilesLocation: "/tmp",
+      // tempFilesLocation: "/tmp",
     };
 
     const parseFile = async () => {
@@ -113,7 +113,7 @@ export default function Upload() {
                   >
                     <Button
                       disabled={isLoading}
-                      className="relative w-[188px] h-10 px-4 py-2 bg-cyan-700 hover:bg-cyan-950 focus:bg-cyan-700 rounded-md justify-center items-center gap-2.5 inline-flex z-20"
+                      className="relative w-[188px] h-10 px-4 py-2 bg-cyan-700 hover:bg-cyan-800 focus:bg-cyan-900 rounded-md justify-center items-center gap-2.5 inline-flex z-20"
                     >
                       <span className="text-white text-base leading-normal">
                         Upload your resume

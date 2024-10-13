@@ -37,3 +37,7 @@ export function useUser() {
 export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
 }
+
+export function appendHttps(url: string) {
+  return url.startsWith("https://") ? url : "https://" + url;
+}

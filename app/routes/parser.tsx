@@ -11,6 +11,7 @@ import triangles from "/main triangles.svg";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { mockJobOffer } from "~/lib/mock/jobOffer";
 
 import { transformCVBasedOnOffer } from "~/models/openai.server";
 import { resumeSchema } from "~/types/resume";
@@ -40,7 +41,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const url = formData.get("url-string");
 
-  const extractedText = await getWebsiteText(url as string);
+  const extractedText = mockJobOffer // await getWebsiteText(url as string);
 
   const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText);
 
