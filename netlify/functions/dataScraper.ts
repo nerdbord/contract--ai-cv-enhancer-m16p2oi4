@@ -27,7 +27,6 @@ export async function getWebsiteText(url: string) {
   });
 
   await browser.close();
-  console.log("Extracted text: ", extractedText);
 
   return extractedText;
 }
