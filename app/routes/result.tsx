@@ -20,22 +20,22 @@ import generatePDF from "react-to-pdf";
 import { Colors } from "~/types/color";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // const session = await getSession(request);
-  // const fineTunedData = session.get("fine-tuned") as resumeType;
+  const session = await getSession(request);
+  const fineTunedData = session.get("fine-tuned") as resumeType;
 
-  // if (!fineTunedData) {
-  //   throw new Response("No CV data found", { status: 404 });
-  // }
+  if (!fineTunedData) {
+    throw new Response("No CV data found", { status: 404 });
+  }
 
-  // return { fineTunedData };
-  return json({});
+  return { fineTunedData };
+  // return json({});
 };
 
 export default function Result() {
   const [color, setColor] = useState<Colors>(Colors.Sky);
-  // const { fineTunedData } = useLoaderData<typeof loader>();
-  // const typedData: cvType = fineTunedData;
-  const typedData: cvType = mockCVData;
+  const { fineTunedData } = useLoaderData<typeof loader>();
+  const typedData: cvType = fineTunedData;
+  // const typedData: cvType = mockCVData;
   const targetRef = useRef(null);
 
   const handleDownload = (
