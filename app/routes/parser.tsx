@@ -11,8 +11,10 @@ import triangles from "/main triangles.svg";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import puppeteer from "puppeteer";
+
 import { transformCVBasedOnOffer } from "~/models/openai.server";
+import { resumeSchema } from "~/types/resume";
+import { getWebsiteText } from "netlify/functions/dataScraper";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,35 +31,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  const session = await getSession(request);
+  const cvData = session.get("cvData");
   const formData = await request.formData();
   const url = formData.get("url-string");
-  const browser = await puppeteer.launch({
-    headless: true,
-  });
-  const page = await browser.newPage();
-  await page.goto(url as string);
-  const extractedText = await page.$eval("*", (el) => {
-    const selection = window.getSelection();
-    if (selection) {
-      const range = document.createRange();
-      range.selectNode(el);
-      selection.removeAllRanges();
-      selection.addRange(range);
-      return selection.toString();
-    }
-    return "";
-  });
-  //console.log(extractedText);
-  const session = await getSession(request)
-  const cvData = session.get("cvData")
+  console.log("Action URL: ", url);
 
-  await browser.close();
-
-  const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText)
-  console.log(finetunedCV);
+  const extractedText = await getWebsiteText(url as string);
   
-  session.unset('cvData')
-  session.set("fine-tuned", finetunedCV)
+  const finetunedCV = await transformCVBasedOnOffer(cvData, extractedText);
+  const parsedFineTunedCV = resumeSchema.safeParse(finetunedCV.object).data;
+  console.log("Parsed: ",parsedFineTunedCV);
+
+  session.unset("cvData");
+  await commitSession(session);
+  session.set("fine-tuned", parsedFineTunedCV);
 
   return redirect("/result", {
     headers: {

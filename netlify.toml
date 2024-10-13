@@ -1,6 +1,7 @@
 [build]
 command = "npm run build"
 publish = "build/client"
+functions = "netlify/functions"
 
 [dev]
 command = "npm run dev"
@@ -14,3 +15,7 @@ for = "/build/*"
 [headers.values]
 
 "Cache-Control" = "public, max-age=31560000, immutable"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["@sparticuz/chromium"]

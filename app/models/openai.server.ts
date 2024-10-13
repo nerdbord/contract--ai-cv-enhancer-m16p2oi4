@@ -57,12 +57,12 @@ export const readCVFileIntoSchema = async (
 };
 
 export const transformCVBasedOnOffer = async (
-  resumeObject: string,
+  resumeText: string,
   parsedWebsite: string
 ) => {
   return generateObject({
     model: openaiClient("gpt-4-turbo"),
-    schema: cvSchema,
+    schema: resumeSchema,
     output: "object",
     messages: [
       {
@@ -72,18 +72,18 @@ export const transformCVBasedOnOffer = async (
         Your job is to fill out the resume schema, fine-tuning the resume in a way fitting to that specific offer.`,
       },
       { role: "user", content: parsedWebsite },
-      { role: "user", content: resumeObject },
+      { role: "user", content: resumeText },
     ],
   });
 };
 
 export const enhanceCVBasedOnOffer = async (
-  resumeObject: string,
+  resumeText: string,
   parsedWebsite: string
 ) => {
   return generateObject({
     model: openaiClient("gpt-4-turbo"),
-    schema: cvSchema,
+    schema: resumeSchema,
     output: "object",
     messages: [
       {
@@ -93,7 +93,7 @@ export const enhanceCVBasedOnOffer = async (
         Your job is to fill out the resume schema by upgrading the resume a little bit. You can make stuff up, but don't go crazy.`,
       },
       { role: "user", content: parsedWebsite },
-      { role: "user", content: JSON.stringify(resumeObject) },
+      { role: "user", content: resumeText },
     ],
   });
 };

@@ -12,7 +12,9 @@ import { readCVTextIntoSchema } from "~/models/openai.server";
 import { resumeSchema } from "~/types/resume";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
-import { parseOffice } from "officeparser";
+import { OfficeParserConfig, parseOffice } from "officeparser";
+import path from "path";
+import { promises as fsPromises } from "fs";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,7 +31,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-
   const formData = await request.formData();
   const file = formData.get("file-upload") as File;
 
@@ -39,32 +40,28 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     const fileBuffer = Buffer.from(await file.arrayBuffer());
+    const config: OfficeParserConfig = {
+      tempFilesLocation: "/tmp",
+    };
 
-    const parseFile = () => {
+    const parseFile = async () => {
       return new Promise<string>((resolve, reject) => {
-        parseOffice(fileBuffer, (value: any, error: any) => {
-          if (error) {
-            console.error("error: ", error);
-            reject(error); // Handle the error
-          } else {
-            resolve(value); // Resolve when done
-          }
-        });
+        parseOffice(
+          fileBuffer,
+          (value: any, error: any) => {
+            if (error) {
+              console.error("[OfficeParser] Error: ", error);
+              reject(error);
+            } else {
+              resolve(value);
+            }
+          },
+          config
+        );
       });
     };
 
     const resolvedString = await parseFile();
-
-    //const cVData = await readCVTextIntoSchema(resolvedString);
-
-    //const parsedCV = resumeSchema.safeParse(cVData.object);
-
-    // if (!parsedCV.success) {
-    //   return json(
-    //     { error: "Failed to parse CV data", issues: parsedCV.error.errors },
-    //     { status: 400 }
-    //   );
-    // }
 
     const session = await getSession(request);
     session.set("cvData", resolvedString);
