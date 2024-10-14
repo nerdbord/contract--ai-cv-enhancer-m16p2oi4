@@ -65,8 +65,21 @@ export async function verifyLogin(email: string, password: string) {
 }
 
 export async function signInWithFigma() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'figma',
-    })
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "figma",
+  });
+}
+
+export async function signInWithDiscord() {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "discord",
+    options: {
+      redirectTo:
+        "https://discord.com/oauth2/authorize?client_id=1295426777841406003&response_type=code&redirect_uri=https%3A%2F%2Frlkfcfoipshhyhnbadkz.supabase.co%2Fauth%2Fv1%2Fcallback&scope=identify+email",
+    },
+  });
+  if (error) return undefined;
+  if (data.url) {
+    return data.url; // use the redirect API for your server framework
   }
-  
+}
