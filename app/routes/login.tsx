@@ -40,11 +40,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
+  console.log(formData);
   const email = formData.get("email");
   const password = formData.get("password");
   const redirectTo = formData.get("redirectTo");
   const remember = formData.get("remember");
   const provider = formData.get("provider")
+
+  if (provider !== "email") {
+    console.log(provider);
+    const url = await signInWithDiscord()
+    if (url) {
+      return redirect(url)
+    }
+    return json({}, { status: 400 })
+  }
 
   if (!validateEmail(email)) {
     return json({ errors: { email: "Email is invalid." } }, { status: 400 });
@@ -64,14 +74,7 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  if (provider !== "email") {
-    console.log(provider);
-    const url = await signInWithDiscord()
-    if (url) {
-      return redirect(url)
-    }
-    return json({}, { status: 400 })
-  }
+
 
   const user = await verifyLogin(email, password);
 

@@ -32,3 +32,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // return the user to an error page with instructions
   return redirect('/auth/auth-code-error', { headers })
 }
+
+// import { LoaderFunction, redirect } from "@remix-run/node";
+// import { supabase } from "~/models/user.server";
+
+// export let loader: LoaderFunction = async ({ request }) => {
+//   const url = new URL(request.url);
+//   const code = url.searchParams.get("code");
+
+//   if (code) {
+//     // Supabase will automatically exchange the code for a session
+//     const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+//     if (error) {
+//       console.error("Error exchanging code for session:", error.message);
+//       return redirect("/login?error=oauth");
+//     }
+
+//     // The session is now stored and the user is logged in.
+//     return redirect("/upload"); // Redirect to your desired page
+//   }
+
+//   return redirect("/login");
+// };
