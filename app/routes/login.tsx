@@ -40,15 +40,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  console.log(formData);
   const email = formData.get("email");
   const password = formData.get("password");
   const redirectTo = formData.get("redirectTo");
   const remember = formData.get("remember");
   const provider = formData.get("provider")
 
-  if (provider !== "email") {
-    console.log(provider);
+  if (provider !== "email") {   
     const url = await signInWithDiscord()
     if (url) {
       return redirect(url)

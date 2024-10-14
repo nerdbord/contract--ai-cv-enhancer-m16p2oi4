@@ -78,14 +78,21 @@ export async function signInWithFigma() {
 }
 
 export async function signInWithDiscord() {
+  console.log("chujemuje");
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "discord",
     options: {
-      redirectTo: "localhost:5173/auth/callback",
+      redirectTo: "https://discord.com/oauth2/authorize?client_id=1295426777841406003&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Fauth%2Fcallback&scope=identify+email",
     },
   });
-  if (error) return undefined;
+  console.log("MUJECHUJE");
+  
+  if (error) {return undefined};
   if (data.url) {
     return data.url; // use the redirect API for your server framework
   }
 }
+
+
+
+//https://discord.com/oauth2/authorize?client_id=1295426777841406003&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Fauth%2Fcallback&scope=identify+email
