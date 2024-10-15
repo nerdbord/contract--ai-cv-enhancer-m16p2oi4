@@ -6,14 +6,21 @@ export type User = { id: string; email: string };
 // Abstract this away
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const discordRedirectUrl = process.env.DISCORD_REDIRECT_URL;
 
 invariant(
   supabaseUrl,
   "SUPABASE_URL must be set in your environment variables."
 );
+
 invariant(
   supabaseAnonKey,
   "SUPABASE_ANON_KEY must be set in your environment variables."
+);
+
+invariant(
+  discordRedirectUrl,
+  "DISCORD_REDIRECT_URL must be set in your environment variables."
 );
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -65,8 +72,27 @@ export async function verifyLogin(email: string, password: string) {
 }
 
 export async function signInWithFigma() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'figma',
-    })
-  }
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "figma",
+  });
+}
+
+export async function signInWithDiscord() {
+  console.log("chujemuje");
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "discord",
+    options: {
+      redirectTo: "https://discord.com/oauth2/authorize?client_id=1295426777841406003&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Fauth%2Fcallback&scope=identify+email",
+    },
+  });
+  console.log("MUJECHUJE");
   
+  if (error) {return undefined};
+  if (data.url) {
+    return data.url; // use the redirect API for your server framework
+  }
+}
+
+
+
+//https://discord.com/oauth2/authorize?client_id=1295426777841406003&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Fauth%2Fcallback&scope=identify+email

@@ -6,14 +6,14 @@ import type {
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { verifyLogin } from "../models/user.server";
+import { signInWithDiscord, verifyLogin } from "../models/user.server";
 import { createUserSession, getUserId } from "../session.server";
 import { validateEmail } from "../utils";
 import { Button } from "../components/ui/button";
 
 import logo from "/logo.svg";
 import github from "/github.svg";
-import google from "/google.svg";
+import discord from "/discord.svg";
 import figma from "/figma.svg";
 import triangles from "/login triangles.svg";
 
@@ -31,7 +31,7 @@ interface ActionData {
     password?: string;
   };
 }
-
+//
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await getUserId(request);
   if (userId) return redirect("/");
@@ -44,6 +44,15 @@ export const action: ActionFunction = async ({ request }) => {
   const password = formData.get("password");
   const redirectTo = formData.get("redirectTo");
   const remember = formData.get("remember");
+  const provider = formData.get("provider")
+
+  if (provider !== "email") {   
+    const url = await signInWithDiscord()
+    if (url) {
+      return redirect(url)
+    }
+    return json({}, { status: 400 })
+  }
 
   if (!validateEmail(email)) {
     return json({ errors: { email: "Email is invalid." } }, { status: 400 });
@@ -62,6 +71,8 @@ export const action: ActionFunction = async ({ request }) => {
       { status: 400 }
     );
   }
+
+
 
   const user = await verifyLogin(email, password);
 
@@ -172,6 +183,8 @@ export default function Login() {
           <Button
             className="w-full rounded bg-cyan-700 py-2 px-4 text-white hover:bg-cyan-800 focus:bg-cyan-900 "
             type="submit"
+            name="provider"
+            value="email"
           >
             Log in
           </Button>
@@ -180,15 +193,30 @@ export default function Login() {
             <span className="my-5">or continue with</span>
           </div>
           <div className="flex justify-between">
-            <Button variant="outline" type="reset">
+            <Button
+              variant="outline"
+              type="submit"
+              name="provider"
+              value="github"
+            >
               <img src={github} className="mr-2" />
               Github
             </Button>
-            <Button variant="outline" type="reset">
-              <img src={google} className="mr-2" />
-              Google
+            <Button
+              variant="outline"
+              type="submit"
+              name="provider"
+              value="discord"
+            >
+              <img src={discord} className="mr-2" />
+              Discord
             </Button>
-            <Button variant="outline" type="reset">
+            <Button
+              variant="outline"
+              type="submit"
+              name="provider"
+              value="figma"
+            >
               <img src={figma} className="mr-2 object-contain max-h-6" />
               Figma
             </Button>

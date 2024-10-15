@@ -6,7 +6,9 @@ import { getNoteListItems } from "~/models/note.server";
 import { requireUserId } from "~/session.server";
 import { useOptionalUser } from "~/utils";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {  
+  console.log("INDEX: ", request.url);
+  
   const userId = await requireUserId(request);
   if (userId) return redirect("/upload");
   return json({});
